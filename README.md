@@ -544,3 +544,11 @@ update the table of contents. This can be done very easily by just running:
 
 This will build a container with `doctoc` and run it to regenerate the
 table of contents. That's it!
+
+### Install depend package
+
+for ubuntu
+  
+    apt-get install arping
+    apt-get install bridge-utils
+    apt-get install openvswitch-switch

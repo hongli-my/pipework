@@ -1,7 +1,9 @@
 #!/bin/sh
 # This code should (try to) follow Google's Shell Style Guide
 # (https://google.github.io/styleguide/shell.xml)
+# 当bash脚本执行出现错误的时候立刻退出脚本
 set -e
+set -x
 
 case "$1" in
   --wait)
@@ -93,9 +95,9 @@ die () {
 # First step: determine type of first argument (bridge, physical interface...),
 # Unless "--wait" is set (then skip the whole section)
 if [ -z "$WAIT" ]; then
-  if [ -d "/sys/class/net/$IFNAME" ]
+  if [ -d "/sys/class/net/$IFNAME" ]  # 判断网桥对应的目录存不存在
   then
-    if [ -d "/sys/class/net/$IFNAME/bridge" ]; then
+    if [ -d "/sys/class/net/$IFNAME/bridge" ]; then   # bridge存在
       IFTYPE=bridge
       BRTYPE=linux
     elif installed ovs-vsctl && ovs-vsctl list-br|grep -q "^${IFNAME}$"; then
@@ -109,7 +111,7 @@ if [ -z "$WAIT" ]; then
     else IFTYPE=phys
     fi
   else
-    case "$IFNAME" in
+    case "$IFNAME" in    # 网桥名称以br开头, 使用linux bridge, 以ovs开头, 使用openvswitch
       br*)
         IFTYPE=bridge
         BRTYPE=linux
